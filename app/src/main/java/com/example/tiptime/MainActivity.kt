@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TipTimeLayout() {
-    var amountInput by remember {mutableStateOf("0") }
+    
     Column(
         modifier = Modifier
             .statusBarsPadding()
