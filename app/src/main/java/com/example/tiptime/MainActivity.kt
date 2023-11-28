@@ -75,19 +75,29 @@ fun TipTimeLayout() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        var inputAmount by remember {mutableStateOf("0")}
+        var amount=inputAmount.toDoubleOrNull()?:0.0
+        val tip= calculateTip(amount)
+
+
+
         Text(
-            text = stringResource(R.string.calculate_tip),
+            text = stringResource(id = R.string.calculate_tip),
             modifier = Modifier
                 .padding(bottom = 16.dp, top = 40.dp)
                 .align(alignment = Alignment.Start)
         )
         
-        EditNumberField(modifier = Modifier
-            .padding(bottom = 32.dp)
-            .align(Alignment.Start))
+        EditNumberField(
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .align(Alignment.Start),
+            value = inputAmount,
+            onValueChange = {inputAmount= it}
+        )
         
         Text(
-            text = stringResource(R.string.tip_amount, "$0.00"),
+            text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
         )
         Spacer(modifier = Modifier.height(150.dp))
@@ -113,16 +123,18 @@ fun TipTimeLayoutPreview() {
 }
 
 @Composable
-fun EditNumberField(modifier: Modifier=Modifier)
+fun EditNumberField(
+    modifier: Modifier,
+    value:String,
+    onValueChange:(String)->Unit)
 {
-  var inputAmount by remember {mutableStateOf("0")}
 
   TextField(
       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
       label = { Text(text = stringResource(id =R.string.bill_amount ))},
       singleLine=true,
-      value = inputAmount,
-      onValueChange ={inputAmount=it},
+      value = value,
+      onValueChange =onValueChange,
       modifier=modifier)
 
 }
