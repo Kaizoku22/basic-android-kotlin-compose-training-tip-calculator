@@ -31,6 +31,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.safeDrawingPadding
+
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -82,8 +84,6 @@ fun TipTimeLayout() {
     val tipPercent=tipInput.toDoubleOrNull()?:0.0
     var roundUp by remember{mutableStateOf(false)}
     val tip = calculateTip(amount,tipPercent,roundUp)
-
-
     Column(
         modifier = Modifier
             .statusBarsPadding()
@@ -110,7 +110,7 @@ fun TipTimeLayout() {
             modifier = Modifier
                 .padding(bottom = 32.dp)
                 .fillMaxWidth()
-        )
+      )
         
         EditNumberField(
             label =R.string.how_was_the_service,
@@ -123,11 +123,14 @@ fun TipTimeLayout() {
             keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done)
+
         )
         
         RoundTheTipRow(
+
             roundUp =roundUp ,
             onRoundUpChanged ={roundUp=it},
+
             modifier = Modifier.padding(bottom = 32.dp)
         )
         
@@ -140,6 +143,7 @@ fun TipTimeLayout() {
 }
 @Composable
 fun EditNumberField(
+
     @StringRes label:Int,
     @DrawableRes leadingIcon:Int,
     value: String,
@@ -159,6 +163,7 @@ fun EditNumberField(
 }
 
 @Composable
+
 fun RoundTheTipRow(modifier:Modifier=Modifier,roundUp:Boolean,onRoundUpChanged:(Boolean)->Unit){
     Row(modifier= modifier
         .fillMaxWidth()
@@ -167,6 +172,7 @@ fun RoundTheTipRow(modifier:Modifier=Modifier,roundUp:Boolean,onRoundUpChanged:(
         )
     {
         Text(text = stringResource(id = R.string.round_up_tip),modifier=modifier)
+
 
         Switch(
             checked =roundUp ,
