@@ -19,6 +19,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -68,10 +69,10 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TipTimeLayout() {
     var amountInput by remember { mutableStateOf("") }
-
     val amount = amountInput.toDoubleOrNull() ?: 0.0
-    val tip = calculateTip(amount)
-
+    var tipInput by remember {mutableStateOf("") }
+    val tipPercent=tipInput.toDoubleOrNull()?:0.0
+    val tip = calculateTip(amount,tipPercent)
     Column(
         modifier = Modifier
             .statusBarsPadding()
@@ -90,8 +91,19 @@ fun TipTimeLayout() {
         EditNumberField(
             value = amountInput,
             onValueChanged = { amountInput = it },
-            modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth()
+            modifier = Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth()
         )
+        
+        EditNumberField(
+            label =R.string.how_was_the_service,
+            value =tipInput ,
+            onValueChanged ={tipInput=it},
+            modifier= Modifier
+                .padding(bottom = 32.dp)
+                .fillMaxWidth())
+        
         Text(
             text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
@@ -116,12 +128,30 @@ fun EditNumberField(
     )
 }
 
+@Composable
+fun EditNumberField(
+    @StringRes label:Int,
+    value: String,
+    onValueChanged: (String) -> Unit,
+    modifier: Modifier=Modifier
+) {
+    TextField(
+        value = value,
+        singleLine = true,
+        modifier = modifier,
+        onValueChange = onValueChanged,
+        label = { Text(stringResource(label)) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+    )
+}
+
+
 /**
  * Calculates the tip based on the user input and format the tip amount
  * according to the local currency.
  * Example would be "$10.00".
  */
-private fun calculateTip(amount: Double, tipPercent: Double = 15.0): String {
+private fun calculateTip(amount: Double, tipPercent: Double): String {
     val tip = tipPercent / 100 * amount
     return NumberFormat.getCurrencyInstance().format(tip)
 }
